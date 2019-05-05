@@ -12,12 +12,14 @@ namespace MemoryManagmentVisualization
         public int size;
         public bool alocated;
         public String name;
+        public int process_index;
         public hole(int s, int e)
         {
             start = s;
             size = e;
             alocated = false;
             name = "hole";
+            process_index = -1;
         }
         public static void sort(List<hole> l)
         {

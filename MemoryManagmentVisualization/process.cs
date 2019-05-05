@@ -11,7 +11,7 @@ namespace MemoryManagmentVisualization
         public int process_id;
         public int no_of_segments;
         public String[] name_of_segment;
-        public int[] segmenst_sizes;
+        public int[] segment_sizes;
 
         //we da 3shan yasmine m3rafsh mawgood leeh 
         public int segment_id;
@@ -22,7 +22,7 @@ namespace MemoryManagmentVisualization
             process_id = i;
             no_of_segments = number_segments;
             name_of_segment = new String [no_of_segments];
-            segmenst_sizes = new int[no_of_segments];
+            segment_sizes = new int[no_of_segments];
         }
     }
 }
