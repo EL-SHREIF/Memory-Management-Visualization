@@ -69,6 +69,54 @@ namespace MemoryManagmentVisualization
             }
         }
 
+        public void deallocator()
+        {
+            for(int i = 0; i < processes.Count; i++)
+            {
+                for(int j = 0; j < holes.Count; j++)
+                {
+                    if (holes[j].process_index == processes[i].process_id)
+                    {
+                        holes[j].alocated = false;
+                        holes[j].name = "hole";
+                        holes[j].process_index = -1;
+                    }
+                }
+            }
+            fix();
+        }
+
+        public void fix()
+        {
+            hole.sort(holes);
+            List<hole> tempHoles = new List<hole>(0);
+            hole tempBig = new MemoryManagmentVisualization.hole(0,0);
+            while (holes.Count > 0)
+            {
+                hole temp = holes[0];
+                holes.RemoveAt(0);
+                if (temp.alocated)
+                {
+                    tempHoles.Add(tempBig);
+                    tempBig = new MemoryManagmentVisualization.hole(0,0);
+                    tempHoles.Add(temp);
+                }
+                else
+                {
+                    if (tempBig.size == 0)
+                    {
+                        tempBig = temp;
+                    }
+                    else
+                    {
+                        tempBig.size = tempBig.size + temp.size;
+                    }
+                }
+            }
+            if (tempBig.size > 0) tempHoles.Add(tempBig);
+            holes = tempHoles;
+            hole.sort(holes);
+        }
 
     }
 }
