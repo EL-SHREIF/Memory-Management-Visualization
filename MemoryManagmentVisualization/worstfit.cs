@@ -38,12 +38,12 @@ namespace MemoryManagmentVisualization
                     tempHoles.Reverse();
                     for(int j = 0; j < tempHoles.Count; j++)
                     {
-                        if (tempHoles[j].alocated == false && tempHoles[j].size >= temp.segment_sizes[i])
+                        if (tempHoles[j].alocated == false && tempHoles[j].size >= temp.segmenst_sizes[i])
                         {
                             hole tempHole = tempHoles[j];
                             tempHoles.RemoveAt(j);
-                            int remainSize = tempHole.size - temp.segment_sizes[i];
-                            tempHole.size = temp.segment_sizes[i];
+                            int remainSize = tempHole.size - temp.segmenst_sizes[i];
+                            tempHole.size = temp.segmenst_sizes[i];
                             allocated++;
                             tempHole.alocated = true;
                             tempHole.name = temp.name_of_segment[i];
