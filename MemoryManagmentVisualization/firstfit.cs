@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace MemoryManagmentVisualization
 {
-    class firstfit
+     class firstfit
     {
 
         //Inputs:
         public static List<hole> holes;
         public static List<process> processes;
+        public static List<process> segments_not_allocated = new List<process> ();
 
-        //Processes can't be allocated in the memory:
-        //  public List<hole> segments_not_allocated;
-
+        
         //Constructor: "here we take the input"
         public firstfit(List<hole> initial_holes, List<process> allocation_process)
         {
@@ -23,26 +22,30 @@ namespace MemoryManagmentVisualization
             processes = allocation_process;
         }
 
-        public static void First_Fit_Algorithm()
+        public void First_Fit_Algorithm()
         {
             int process_segments_number;
             int segment_Size;
             string segment_name;
             int remained_hole_size;
-
+            int allocated_not_done = 0;
+            int place = 0;
 
             while (processes.Count > 0)
             {
                 //store each process info then remove it:
                 process allocation_process = processes[0];
+                process p = allocation_process;
                 processes.RemoveAt(0);
 
                 process_segments_number = allocation_process.no_of_segments;
+                bool[] segment_allocation_done = new bool[process_segments_number]; 
+
                 for (int i = 0; i < process_segments_number; i++)
                 {
                     segment_Size = allocation_process.segment_sizes[i];
                     segment_name = allocation_process.name_of_segment[i];
-                    bool segment_allocation_done = false;
+                    segment_allocation_done[i] = false;
 
                     for (int j = 0; j < holes.Count; j++)
                     {
@@ -50,7 +53,7 @@ namespace MemoryManagmentVisualization
                         if ((holes[j].alocated == false) && (holes[j].size >= segment_Size))
                         {
                             holes[j].alocated = true;
-                            segment_allocation_done = true;
+                            segment_allocation_done[i] = true;
                             remained_hole_size = holes[j].size - segment_Size;
                             holes[j].size = segment_Size;
                             holes[j].name = segment_name;
@@ -64,16 +67,37 @@ namespace MemoryManagmentVisualization
                             break;
                         }
                     }
-                    if (!segment_allocation_done)
-                    {
-                        //segments_not_allocated.Add(new hole ) 
-                    }
-
+                    if (!segment_allocation_done[i])
+                        allocated_not_done++;
                 }
 
+                if (allocated_not_done != 0)
+                {
+                    //No one of process segment is allocated:
+                    if (allocated_not_done == process_segments_number)
+                    {
+                        segments_not_allocated.Add(allocation_process);
+                    }
+                    else 
+                    {
+                      p.no_of_segments = allocated_not_done;
+                      for (int k = 0; k < process_segments_number; k++)
+                      {
+                          if (segment_allocation_done[k] == false)
+                          {
+                            p.name_of_segment[place] = allocation_process.name_of_segment[k];
+                            p.segment_sizes[place] = allocation_process.segment_sizes[k];
+                            place++;
+                          } 
+                      }
+                      segments_not_allocated.Add(p);
+                    }
+                }
             }
 
         }
 
     }
+}
+
 }
