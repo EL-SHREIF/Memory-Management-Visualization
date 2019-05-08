@@ -12,7 +12,7 @@ namespace MemoryManagmentVisualization
         public List<process> processes;
 
         
-        public List<process> holdProcesses;         //processes can't be allocated in memory
+        public List<process> holdProcesses = new List<process>(0);         //processes can't be allocated in memory
         public worstfit(List<hole> h, List<process> p)
         {
             holes = h;

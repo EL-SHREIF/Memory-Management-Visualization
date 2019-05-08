@@ -43,7 +43,7 @@ namespace MemoryManagmentVisualization
 
                 for (int i = 0; i < process_segments_number; i++)
                 {
-                    segment_Size = allocation_process.segment_sizes[i];
+                    segment_Size = allocation_process.segmenst_sizes[i];
                     segment_name = allocation_process.name_of_segment[i];
                     segment_allocation_done[i] = false;
 
@@ -86,7 +86,7 @@ namespace MemoryManagmentVisualization
                           if (segment_allocation_done[k] == false)
                           {
                             p.name_of_segment[place] = allocation_process.name_of_segment[k];
-                            p.segment_sizes[place] = allocation_process.segment_sizes[k];
+                            p.segmenst_sizes[place] = allocation_process.segmenst_sizes[k];
                             place++;
                           } 
                       }
@@ -100,4 +100,4 @@ namespace MemoryManagmentVisualization
     }
 }
 
-}
+
