@@ -10,9 +10,9 @@ namespace MemoryManagmentVisualization
     {
 
         //Inputs:
-        public static List<hole> holes;
-        public static List<process> processes;
-        public static List<process> segments_not_allocated = new List<process> ();
+        public List<hole> holes;
+        public List<process> processes= new List<process> ();
+        public List<process> segments_not_allocated = new List<process> ();
 
         
         //Constructor: "here we take the input"

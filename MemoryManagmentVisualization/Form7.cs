@@ -12,11 +12,12 @@ namespace MemoryManagmentVisualization
 {
     public partial class Form7 : Form
     {
-
+        firstfit schedular1;
+        worstfit schedular2;
         List<hole> holes = new List<hole>();
         List<hole> segments = new List<hole>();
         memory mem;
-        List<process> processes;
+        List<process> processes= new List<process> ();
         int num_of_process;
         Color[] colors;
       
@@ -42,7 +43,7 @@ namespace MemoryManagmentVisualization
                     p.name_of_segment[j] = Form1.name_of_segments[idx];
                     idx++;
                 }
-                //processes.Add(p);
+                processes.Add(p);
             }
 
             colors = new Color[15];
@@ -61,10 +62,40 @@ namespace MemoryManagmentVisualization
             colors[12] = Color.Cyan;
             colors[13] = Color.Fuchsia;
             colors[14] = Color.Gold;
+            if (Form1.type_of_algorithm == 1)
+            {
+                schedular1 = new firstfit(holes, processes);
+                schedular1.First_Fit_Algorithm();
+                segments = schedular1.holes;
+               
+            }
+            else if (Form1.type_of_algorithm == 2)
+            {
+                schedular2 = new worstfit(holes, processes);
+                schedular2.computebestFit();
+                segments = schedular2.holes;
 
+            }
+            else if (Form1.type_of_algorithm == 3)
+            {
+                schedular2 = new worstfit(holes, processes);
+                schedular2.computeWorstFit();
+                segments = schedular2.holes;
+            }
             Draw();
         }
-
+        void trans(List<hole> h)
+        {
+            for(int i = 0; i < h.Count; i++)
+            {
+                if (h[i].alocated)
+                {
+                    hole t = h[i];
+                    segments.Add(t);
+                }
+            }
+        }
+        
         /*for integration:
          * awl 7aga 3ndak list of holes de feha al holes
          * 3ndak list of process de feha processes we feha kaman enak ama hat3ml add process hattzawed 3leha 
@@ -91,7 +122,7 @@ namespace MemoryManagmentVisualization
         void Draw() {
 
             //lazem t8ayar kelmet holes aly fe alsatr aly t7t da le segments 3shan yrsem al output mayrsemsh 7aga tanya 
-            mem = new memory(holes);
+            mem = new memory(segments);
 
             Label l = new Label();
             int x = this.label3.Location.X;
@@ -114,8 +145,9 @@ namespace MemoryManagmentVisualization
             l.ForeColor = this.label3.ForeColor;
             l.Size = this.label3.Size;
             int place=0;
-            for (int i = 0; i < mem.number_of_segments; i++)
+            for (int i = 0; i < mem.segments.Count; i++)
             {
+                if (i + 1 < mem.segments.Count&& mem.segments[i].start == mem.segments[i + 1].start) continue;
                 Label l2 = new Label();
                 l2.TextAlign = l.TextAlign;
                 l2.Location = new Point(x, y);
@@ -132,7 +164,7 @@ namespace MemoryManagmentVisualization
                 }
                 else
                 {
-                    l2.Text = "P" + (mem.segments[i].process_index + 1).ToString() + ": " + mem.segments[i].name;
+                    l2.Text = "P" + (mem.segments[i].process_index ).ToString() + ": " + mem.segments[i].name;
                     l2.BackColor = colors[(mem.segments[i].process_index + 1)%15];
                     place = place + mem.segments[i].size;
                 }
