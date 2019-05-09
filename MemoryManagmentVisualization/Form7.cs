@@ -165,6 +165,7 @@ namespace MemoryManagmentVisualization
             int promptValue = Form7.ShowDialog("Number Of Segments", "enter no of segments");
             process p=Form7.ShowDialog2("enter process data", "new process",promptValue,num_of_process);
             num_of_process++;
+            processes.Add(p);
         }
 
         private static int ShowDialog(string text, string caption)
