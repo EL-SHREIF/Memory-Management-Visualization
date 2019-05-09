@@ -65,8 +65,27 @@ namespace MemoryManagmentVisualization
             Draw();
         }
 
+        /*for integration:
+         * awl 7aga 3ndak list of holes de feha al holes
+         * 3ndak list of process de feha processes we feha kaman enak ama hat3ml add process hattzawed 3leha 
+         * 3ndak function esmaha draw bttnedeh awl ma btfta7 al form de 
+         * ana 3awzak abl ma tndaha t3mel alkalam da:
+         *       tshoof al var aly esmo Form1.type_of_algorithm
+         *                  law be 1 m3anaha First fit 7ot al code bta3o 
+         *                  law be 2 yb2a bist 
+         *                  law 3 yb2a worest
+         *       b3d ma 3rft t7aded al algorithm abl ma tndah draw ba2a 7ot function aktebha anta bta5od al holes we al processes lists
+         *       we btraga3ly al List aly asmaha segments 
+         *       ana harsem aly mawgood gwa segments we isa ytl3 sa7 
+         *       mafeesh deallocation at3amal lesa 
+         *       zabat anta azay hat integrate 
+         *       malaksh da3aw be al functions aly esmaha drawdialog we alkalam da 
+         * shed 7elak ya negm rabna ywafa2ak 
+         */
+
+
         void Draw() {
-            mem = new memory(holes);
+            mem = new memory(segments);
 
             Label l = new Label();
             int x = this.label3.Location.X;
@@ -147,6 +166,7 @@ namespace MemoryManagmentVisualization
             process p=Form7.ShowDialog2("enter process data", "new process",promptValue,num_of_process);
             num_of_process++;
         }
+
         private static int ShowDialog(string text, string caption)
         {
             Form prompt = new Form();
