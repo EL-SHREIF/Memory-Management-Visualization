@@ -24,7 +24,7 @@ namespace MemoryManagmentVisualization
         private void input() { 
             holes = new List<hole>();
             processes = new List<process>();
-            //==========================================
+            /*==========================================
             Label old_lb = new Label();
             old_lb = this.lbl_p1;
             old_lb.Visible = true;
@@ -82,12 +82,41 @@ namespace MemoryManagmentVisualization
                     idx++;
                 }
                 processes.Add(p);
-            }
+            }*/
         }
 
         private void btn_back_Click(object sender, EventArgs e)
         {
             Form5 form = new Form5();
+            form.Show();
+            Hide();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            
+        }
+
+        private void btn_ok_number_of_process_Click(object sender, EventArgs e)
+        {
+            Form1.type_of_algorithm = 3;
+            Form7 form = new Form7();
+            form.Show();
+            Hide();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Form1.type_of_algorithm = 2;
+            Form7 form = new Form7();
+            form.Show();
+            Hide();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Form1.type_of_algorithm = 1;
+            Form7 form = new Form7();
             form.Show();
             Hide();
         }

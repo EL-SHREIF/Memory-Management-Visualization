@@ -8,10 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace MemoryManagmentVisualization
 {
     public partial class Form1 : Form
     {
+
         public static int total_memory_size=1;
         public static int no_of_holes = 1;
         public static int no_of_processes = 1;
@@ -23,7 +25,9 @@ namespace MemoryManagmentVisualization
 
         public static String[] name_of_segments;
         public static int[] size_of_segments;
-        
+
+        public static int type_of_algorithm=0;
+
         public Form1()
         {
             InitializeComponent();
@@ -33,6 +37,8 @@ namespace MemoryManagmentVisualization
         {
 
         }
+
+     
 
         private void btn_next_Click(object sender, EventArgs e)
         {

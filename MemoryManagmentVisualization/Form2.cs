@@ -40,10 +40,15 @@ namespace MemoryManagmentVisualization
             Form1.total_memory_size = (int)numeric_numProcess.Value;
             Form1.no_of_holes = (int)numericUpDown1.Value;
             Form1.no_of_processes = (int)numericUpDown2.Value;
+           
+                Form3 form = new Form3();
+                form.Show();
+                Hide(); 
+        }
 
-            Form3 form = new Form3();
-            form.Show();
-            Hide(); 
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

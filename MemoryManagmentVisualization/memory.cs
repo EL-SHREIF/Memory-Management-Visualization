@@ -61,8 +61,8 @@ namespace MemoryManagmentVisualization
                 if (i != all_holes.Count - 1)
                 {
                     int s = all_holes[i].start + all_holes[i].size;
-                    int ss = all_holes[i + 1].start - all_holes[i].start + all_holes[i].size;
-                    hole h = new hole(s, ss-s);
+                    int ss = all_holes[i + 1].start - all_holes[i].start - all_holes[i].size;
+                    hole h = new hole(s, ss);
                     h.name = "out";
                     segments.Add(h);
                 }

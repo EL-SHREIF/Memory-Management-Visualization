@@ -18,6 +18,8 @@ namespace MemoryManagmentVisualization
         int idx = 0;
         int hi = 0;
         int tot;
+
+        
         public Form5()
         {
             InitializeComponent();

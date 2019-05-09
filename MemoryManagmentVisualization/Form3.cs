@@ -162,12 +162,21 @@ namespace MemoryManagmentVisualization
                     }
                 }
             }
-            
+
             if (ok1&&ok2)
             {
-                Form4 form = new Form4();
-                form.Show();
-                Hide();
+                if (Form1.no_of_processes == 0)
+                {
+                    Form6 form = new Form6();
+                    form.Show();
+                    Hide();
+                }
+                else
+                {
+                    Form4 form = new Form4();
+                    form.Show();
+                    Hide();
+                } 
             }
             else if (ok2==false)
             {
