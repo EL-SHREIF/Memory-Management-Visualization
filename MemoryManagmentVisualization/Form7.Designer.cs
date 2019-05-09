@@ -32,14 +32,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tabControl_GanttChart = new System.Windows.Forms.TabControl();
             this.tabPage_GanttChart = new System.Windows.Forms.TabPage();
-            this.label3 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel_ex_1 = new System.Windows.Forms.Panel();
             this.lbl_p1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.btn_ok_number_of_process = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabControl_GanttChart.SuspendLayout();
             this.tabPage_GanttChart.SuspendLayout();
             this.SuspendLayout();
@@ -54,6 +55,7 @@
             this.label2.TabIndex = 172;
             this.label2.Text = "Memory";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // tabControl_GanttChart
             // 
@@ -80,6 +82,25 @@
             this.tabPage_GanttChart.Text = "Internal adresses";
             this.tabPage_GanttChart.UseVisualStyleBackColor = true;
             // 
+            // label5
+            // 
+            this.label5.BackColor = System.Drawing.SystemColors.Desktop;
+            this.label5.Location = new System.Drawing.Point(34, 19);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(35, 1);
+            this.label5.TabIndex = 172;
+            this.label5.Text = "label5";
+            // 
+            // label4
+            // 
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Gray;
+            this.label4.Location = new System.Drawing.Point(6, 20);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(37, 19);
+            this.label4.TabIndex = 171;
+            this.label4.Text = "0";
+            // 
             // label3
             // 
             this.label3.BackColor = System.Drawing.Color.Maroon;
@@ -93,19 +114,9 @@
             this.label3.UseCompatibleTextRendering = true;
             this.label3.Visible = false;
             // 
-            // label4
-            // 
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.Gray;
-            this.label4.Location = new System.Drawing.Point(6, 20);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(37, 19);
-            this.label4.TabIndex = 171;
-            this.label4.Text = "0";
-            // 
             // panel_ex_1
             // 
-            this.panel_ex_1.BackColor = System.Drawing.Color.Red;
+            this.panel_ex_1.BackColor = System.Drawing.Color.Maroon;
             this.panel_ex_1.Location = new System.Drawing.Point(29, 129);
             this.panel_ex_1.Name = "panel_ex_1";
             this.panel_ex_1.Size = new System.Drawing.Size(20, 20);
@@ -139,15 +150,6 @@
             this.label1.TabIndex = 175;
             this.label1.Text = "Hole";
             // 
-            // label5
-            // 
-            this.label5.BackColor = System.Drawing.SystemColors.Desktop;
-            this.label5.Location = new System.Drawing.Point(34, 19);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 1);
-            this.label5.TabIndex = 172;
-            this.label5.Text = "label5";
-            // 
             // btn_ok_number_of_process
             // 
             this.btn_ok_number_of_process.BackColor = System.Drawing.Color.Aquamarine;
@@ -163,12 +165,28 @@
             this.btn_ok_number_of_process.UseVisualStyleBackColor = false;
             this.btn_ok_number_of_process.Click += new System.EventHandler(this.btn_ok_number_of_process_Click);
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Aquamarine;
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.button1.Location = new System.Drawing.Point(12, 457);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(258, 46);
+            this.button1.TabIndex = 178;
+            this.button1.Text = "End and start new Memory";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form7
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(809, 533);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.btn_ok_number_of_process);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
@@ -198,5 +216,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btn_ok_number_of_process;
+        private System.Windows.Forms.Button button1;
     }
 }

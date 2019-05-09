@@ -81,11 +81,17 @@ namespace MemoryManagmentVisualization
          *       zabat anta azay hat integrate 
          *       malaksh da3aw be al functions aly esmaha drawdialog we alkalam da 
          * shed 7elak ya negm rabna ywafa2ak 
+         * 
+         * 
+         * 
+         * ah sa7ee7 shoof awl comment fe dunction draw()
          */
 
 
         void Draw() {
-            mem = new memory(segments);
+
+            //lazem t8ayar kelmet holes aly fe alsatr aly t7t da le segments 3shan yrsem al output mayrsemsh 7aga tanya 
+            mem = new memory(holes);
 
             Label l = new Label();
             int x = this.label3.Location.X;
@@ -269,6 +275,18 @@ namespace MemoryManagmentVisualization
             prompt.Controls.Add(textLabel);
             prompt.ShowDialog();
             return p;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Form2 form = new Form2();
+            form.Show();
+            Hide();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
