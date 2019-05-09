@@ -24,6 +24,40 @@ namespace MemoryManagmentVisualization
             process_index = -1;
             hole_id = 0;
         }
+        
+         public static void sort(List<hole> l)
+        {
+            for (int i = 0; i < l.Count; i++)
+            {
+                for (int j = 0; j < l.Count; j++)
+                {
+                    if (l[i].start < l[j].start)
+                    {
+                        hole temp = l[i];
+                        l[i] = l[j];
+                        l[j] = temp;
+                    }
+                }
+            }
+        }
+        public static void sort2(List<hole> l)
+        {
+            for (int i = 0; i < l.Count; i++)
+            {
+                for (int j = 0; j < l.Count; j++)
+                {
+                    if (l[i].size < l[j].size)
+                    {
+                        hole temp = l[i];
+                        l[i] = l[j];
+                        l[j] = temp;
+                    }
+                }
+            }
+        }
+        
+        
+        
         public static void sort_by_start(List<hole> l)
         {
             for (int i = 0; i < l.Count - 1; i++)
