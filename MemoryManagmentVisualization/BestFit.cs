@@ -8,6 +8,7 @@ namespace GUI_OS
 {
     class BestFit
     {
+        public List<process> remaining_processes = new List<process>(); 
 
         public BestFit(List<process> p, List<hole> h)
         {
@@ -16,8 +17,8 @@ namespace GUI_OS
            // print(output_memory, memory_size);
         }
 
-        public static List<hole> func(List<process> p, List<hole> h)
-        {
+        public List<hole> func(List<process> p, List<hole> h)
+        {           
             hole.sort_by_start(h);
             List<hole> final_memory = new List<hole>();
             List<hole> empty_holes = new List<hole>();
@@ -32,8 +33,7 @@ namespace GUI_OS
             for (int i = 0; i < no_of_holes; i++)
             {
                 counter[i] = 0;
-            }
-
+            }           
             int total_sgements = 0;
             for (int i = 0; i < p.Count; i++)
             {
@@ -129,6 +129,7 @@ namespace GUI_OS
                         }
                         else if (y == temperory_memory.Count - 1)
                         {
+                            remaining_processes.Add(p[i]);   
                             for (int q = 0; q < temperory_memory.Count; q++)
                             {
                                 for (int w = 0; w < empty_holes.Count; w++)
