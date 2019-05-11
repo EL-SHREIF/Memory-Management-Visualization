@@ -8,7 +8,7 @@ namespace GUI_OS
 {
     class BestFit
     {
-             
+
         public BestFit(List<process> p, List<hole> h)
         {
             List<hole> output_memory = new List<hole>();
@@ -25,7 +25,7 @@ namespace GUI_OS
             int no_of_holes = h.Count;
             hole m;
             int k = 0;
-            int size=0;
+            int size = 0;
             int j;
             int x;
             int[] counter = new int[no_of_holes];
@@ -33,93 +33,135 @@ namespace GUI_OS
             {
                 counter[i] = 0;
             }
-            
+
             int total_sgements = 0;
             for (int i = 0; i < p.Count; i++)
             {
-               total_sgements = p[i].no_of_segments +total_sgements ;
+                total_sgements = p[i].no_of_segments + total_sgements;
             }
 
             Compaction_Before(empty_holes, ref no_of_holes);
-                for (int i = 0; i < p.Count; i++)
+            for (int i = 0; i < p.Count; i++)
+            {
+                List<hole> temperory_memory = new List<hole>(); // for segments of each process
+                for (x = 0; x < p[i].no_of_segments; x++)
                 {
-                    for ( x = 0; x < p[i].no_of_segments; x++)
+                    List<hole> best_holes = new List<hole>();
+                    for (j = 0; j < no_of_holes; j++)
                     {
-                        List<hole> best_holes = new List<hole>();
-                        for (j = 0; j < no_of_holes; j++)
+                        if (!empty_holes[j].alocated)
                         {
-                            if (!empty_holes[j].alocated)
+                            if (p[i].segment_sizes[x] <= empty_holes[j].size)
                             {
-                                if (p[i].segment_sizes[x] <= empty_holes[j].size)
+                                size = h[j].size - p[i].segment_sizes[x];
+                                k++;
+                                m = new hole(h[j].start, size);
+                                m.hole_id = h[j].hole_id;
+                                best_holes.Add(m);
+
+                                if (k > 1)
                                 {
-
-                                    size = h[j].size - p[i].segment_sizes[x];
-                                    k++;
-                                    m = new hole(h[j].start, size);
-                                    m.hole_id = h[j].hole_id;
-                                    best_holes.Add(m);
-
-                                    if (k > 1)
-                                    {
-                                        hole.sort_by_size(best_holes);
-                                    }
-                                }                              
+                                    hole.sort_by_size(best_holes);
+                                }
                             }
-                           
                         }
-
-                        if (k != 0)
-                        {
-                           
-                            if (best_holes[0].size == 0)
-                            {
-                               empty_holes[best_holes[0].hole_id].alocated = true;
-                               empty_holes[best_holes[0].hole_id].name = p[i].name_of_segment[x];
-                               p[i].process_index = i + x;
-                               final_memory.Add(empty_holes[best_holes[0].hole_id]);
-
-                            }
-
-                            else
-                            {                             
-                                int a = best_holes[0].start;
-                                int b = p[i].segment_sizes[x];
-                                hole t = new hole(a, b);                               
-                                t.alocated = true;
-                                t.name = p[i].name_of_segment[x];
-                                p[i].process_index = i + x;
-                                final_memory.Add(t);
-                                hole.sort_by_start(final_memory);
-                                // second hole after splitting
-                                int z = t.start + t.size;
-                                int y = best_holes[0].size;
-                                hole s = new hole(z, y);
-                                empty_holes[best_holes[0].hole_id].start = s.start;
-                                empty_holes[best_holes[0].hole_id].size = s.size;
-                                Compaction_After(empty_holes, best_holes, ref no_of_holes);                                                                                      
-                                hole.sort_by_start(empty_holes);
-                            }
-                            k = 0;                           
-                        }
-                    }                
-                    hole.sort_by_start(final_memory);
-                }
-                for (int i = 0; i < no_of_holes; i++)
-                {
-                    if (!empty_holes[i].alocated)
-                    {                      
-                        final_memory.Add(empty_holes[i]);
-                        hole.sort_by_start(final_memory);
 
                     }
-                }
 
-                    return final_memory;
+                    if (k != 0)
+                    {
+                        if (best_holes[0].size == 0)
+                        {
+                            empty_holes[best_holes[0].hole_id].alocated = true;
+                            empty_holes[best_holes[0].hole_id].name = p[i].name_of_segment[x];
+                            temperory_memory.Add(h[best_holes[0].hole_id]);
+                        }
+
+                        else
+                        {
+                            int a = best_holes[0].start;
+                            int b = p[i].segment_sizes[x];
+                            hole t = new hole(a, b);
+                            t.alocated = true;
+                            t.name = p[i].name_of_segment[x];
+                            temperory_memory.Add(t);
+                            // second hole after splitting
+                            int z = t.start + t.size;
+                            int y = best_holes[0].size;
+                            hole s = new hole(z, y);
+                            s.hole_id = best_holes[0].hole_id;
+                            temperory_memory.Add(s);
+                            Compaction_After(empty_holes, best_holes, ref no_of_holes);
+                            hole.sort_by_start(empty_holes);
+                        }
+                        k = 0;
+                    }
+                }
+                int u = 0;
+                int count = 0;
+                for (int y = 0; y < temperory_memory.Count; y++)
+                {
+                    if (temperory_memory[y].name == p[i].name_of_segment[u])
+                    {
+                        count++;
+                        if (count == p[i].no_of_segments)
+                        {
+                            for (int q = 0; q < temperory_memory.Count; q++)
+                            {
+                                if (temperory_memory[q].name == "hole")
+                                {
+                                    empty_holes[temperory_memory[q].hole_id].start = temperory_memory[q].start;
+                                    empty_holes[temperory_memory[q].hole_id].size = temperory_memory[q].size;
+                                    hole.sort_by_start(empty_holes);
+                                }
+                                else
+                                {
+                                    final_memory.Add(temperory_memory[q]);
+                                    for (int w = 0; w < empty_holes.Count; w++)
+                                    {
+                                        if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                        {
+                                            empty_holes[w].process_index = p[i].process_id;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (y == temperory_memory.Count - 1)
+                        {
+                            for (int q = 0; q < temperory_memory.Count; q++)
+                            {
+                                for (int w = 0; w < empty_holes.Count; w++)
+                                {
+                                    if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                    {
+                                        empty_holes[w].alocated = false;
+                                        empty_holes[w].name = "hole";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                hole.sort_by_start(final_memory);
+            }
+
+            for (int i = 0; i < no_of_holes; i++)
+            {
+                if (!empty_holes[i].alocated)
+                {
+                    final_memory.Add(empty_holes[i]);
+                    hole.sort_by_start(final_memory);
+
+                }
+            }
+
+            return final_memory;
         }
 
         public static void Compaction_Before(List<hole> empty_holes, ref int no_of_holes)
         {
-            for (int i = 0; i < no_of_holes-1; i++)
+            for (int i = 0; i < no_of_holes - 1; i++)
             {
                 for (int j = i + 1; j < no_of_holes; j++)
                 {
@@ -134,8 +176,8 @@ namespace GUI_OS
                             break;
                         }
                     }
-                }                   
-            }                  
+                }
+            }
             for (int j = 0; j < no_of_holes; j++)
             {
                 empty_holes[j].hole_id = j;
@@ -144,8 +186,8 @@ namespace GUI_OS
 
 
 
-        public static void Compaction_After(List<hole> empty_holes ,List<hole> best_holes ,ref int no_of_holes)
-        {          
+        public static void Compaction_After(List<hole> empty_holes, List<hole> best_holes, ref int no_of_holes)
+        {
             int u = best_holes[0].hole_id;
 
             if (u < no_of_holes - 1)
@@ -164,27 +206,27 @@ namespace GUI_OS
                 }
             }
 
-            
+
             for (int i = 0; i < no_of_holes; i++)
             {
                 empty_holes[i].hole_id = i;
             }
         }
 
-        /*public static void print(List<hole> l, int memory_size)
+       /* public static void print(List<hole> l, int memory_size)
         {
-            List<hole> output =new List<hole>();
+            List<hole> output = new List<hole>();
             hole.sort_by_start(l);
-                   
+
 
             // for first location in block
-            for (int i = 0; i <1; i++)
+            for (int i = 0; i < 1; i++)
             {
-               int size = l[i].start - 0;
+                int size = l[i].start - 0;
 
-                if (size !=0)
+                if (size != 0)
                 {
-                    hole h = new hole(0 , size);
+                    hole h = new hole(0, size);
                     h.alocated = true;
                     h.name = "old process";
                     output.Add(h);
@@ -200,13 +242,13 @@ namespace GUI_OS
             }
 
             // for locations between memory
-            for (int i = 1; i <l.Count; i++)
+            for (int i = 1; i < l.Count; i++)
             {
-               int size = l[i].start - (l[i-1].start + (l[i-1].size));
+                int size = l[i].start - (l[i - 1].start + (l[i - 1].size));
 
-                if (size !=0)
+                if (size != 0)
                 {
-                    hole h = new hole(l[i-1].start + l[i-1].size , size);
+                    hole h = new hole(l[i - 1].start + l[i - 1].size, size);
                     h.alocated = true;
                     h.name = "old process";
                     output.Add(h);
@@ -222,7 +264,7 @@ namespace GUI_OS
             }
 
             // for last location in memory
-            for (int i = l.Count-1; i < l.Count; i++)
+            for (int i = l.Count - 1; i < l.Count; i++)
             {
                 int size = memory_size - (l[i].start + l[i].size);
 
@@ -245,15 +287,15 @@ namespace GUI_OS
 
             for (int i = 0; i < output.Count; i++)
             {
-               
-                int end =  output[i].start + output[i].size;
+
+                int end = output[i].start + output[i].size;
                 Console.WriteLine("\n");
                 Console.WriteLine(output[i].start);
                 Console.WriteLine("->");
                 Console.WriteLine(output[i].name);
                 Console.WriteLine("->");
                 Console.WriteLine(end);
-            }                  
+            }
         }*/
     }
 }
