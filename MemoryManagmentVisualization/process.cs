@@ -12,10 +12,7 @@ namespace MemoryManagmentVisualization
         public int no_of_segments;
         public String[] name_of_segment;
         public int[] segmenst_sizes;
-
-        //we da 3shan yasmine m3rafsh mawgood leeh 
-        public int segment_id;
-
+      
 
         public process(int i, int number_segments)
         {
