@@ -14,13 +14,42 @@ namespace MemoryManagmentVisualization
     {
         firstfit schedular1;
         worstfit schedular2;
+        bestfit1 schedular3;
         List<hole> holes = new List<hole>();
         List<hole> segments = new List<hole>();
         memory mem;
         List<process> processes= new List<process> ();
         int num_of_process;
         Color[] colors;
-      
+        private Form7(List<hole> ha,List<hole> s,List<process> pa,int n,int op)
+        {
+            holes = ha;
+            segments = s;
+            processes = pa;
+            num_of_process = n;
+            InitializeComponent();
+
+            
+
+            colors = new Color[15];
+            colors[0] = Color.Maroon;
+            colors[1] = Color.Yellow;
+            colors[2] = Color.Violet;
+            colors[3] = Color.Blue;
+            colors[4] = Color.Lime;
+            colors[5] = Color.Chocolate;
+            colors[6] = Color.Aqua;
+            colors[7] = Color.DarkGreen;
+            colors[8] = Color.Maroon;
+            colors[9] = Color.Pink;
+            colors[10] = Color.Silver;
+            colors[11] = Color.BlanchedAlmond;
+            colors[12] = Color.Cyan;
+            colors[13] = Color.Fuchsia;
+            colors[14] = Color.Gold;
+            if (op == 1) trans();
+            else Draw();
+        }
         public Form7()
         {
             InitializeComponent();
@@ -71,9 +100,9 @@ namespace MemoryManagmentVisualization
             }
             else if (Form1.type_of_algorithm == 2)
             {
-                schedular2 = new worstfit(holes, processes);
-                schedular2.computebestFit();
-                segments = schedular2.holes;
+                schedular3 = new bestfit1(processes, holes);
+                
+                segments = schedular3.output_memory;
 
             }
             else if (Form1.type_of_algorithm == 3)
@@ -84,18 +113,32 @@ namespace MemoryManagmentVisualization
             }
             Draw();
         }
-        void trans(List<hole> h)
+        void trans()
         {
-            for(int i = 0; i < h.Count; i++)
+            if (Form1.type_of_algorithm == 1)
             {
-                if (h[i].alocated)
-                {
-                    hole t = h[i];
-                    segments.Add(t);
-                }
+                schedular1 = new firstfit(holes, processes);
+                schedular1.First_Fit_Algorithm();
+                segments = schedular1.holes;
+
             }
+            else if (Form1.type_of_algorithm == 2)
+            {
+                schedular3 = new bestfit1(processes, holes);
+
+                segments = schedular3.output_memory;
+
+            }
+            else if (Form1.type_of_algorithm == 3)
+            {
+                schedular2 = new worstfit(holes, processes);
+                schedular2.computeWorstFit();
+                segments = schedular2.holes;
+            }
+            Draw();
         }
         
+
         /*for integration:
          * awl 7aga 3ndak list of holes de feha al holes
          * 3ndak list of process de feha processes we feha kaman enak ama hat3ml add process hattzawed 3leha 
@@ -200,10 +243,14 @@ namespace MemoryManagmentVisualization
 
         private void btn_ok_number_of_process_Click(object sender, EventArgs e)
         {
+            num_of_process++;
             int promptValue = Form7.ShowDialog("Number Of Segments", "enter no of segments");
             process p=Form7.ShowDialog2("enter process data", "new process",promptValue,num_of_process);
             num_of_process++;
             processes.Add(p);
+            Form7 form = new Form7(holes,segments,processes,num_of_process,1);
+            form.Show();
+            Hide();
         }
 
         private static int ShowDialog(string text, string caption)
@@ -318,6 +365,108 @@ namespace MemoryManagmentVisualization
 
         private void label2_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            List<process> p = ShowDialog3();
+            worstfit t = new worstfit(segments, p);
+            t.deallocator();
+            segments = t.holes;
+            Form7 form = new Form7(holes, segments, processes, num_of_process,2);
+            form.Show();
+            Hide();
+
+        }
+        bool is_there(int n,List<process> p)
+        {
+            for(int i = 0; i < p.Count; i++)
+            {
+                if (p[i].process_id == n) return false;
+            }
+            return true;
+        }
+        private List<process> ShowDialog3()
+        {
+            List<process> pr = new List<process>();
+            for(int i = 0; i < segments.Count; i++)
+            {
+                if (segments[i].alocated == true)
+                {
+                    if (is_there(segments[i].process_index, pr))
+                    {
+                        pr.Add(new process(segments[i].process_index, 1));
+                    }
+                }
+            }
+            Form prompt = new Form();
+            prompt.Width = 600;
+            prompt.Height = 600;
+            prompt.AutoScroll = true;
+            prompt.Text = "deallocator";
+            Label[] values = new Label[pr.Count];
+            CheckBox[] names = new CheckBox[pr.Count];
+            prompt.BackColor = Color.MistyRose;
+            Label textLabel = new Label() { Left = 50, Top = 64, Width = 200, Height = 41, Text = "deallocator", BackColor = Color.Gray, Font = new Font("Segoe UI", 14F) };
+            //===============================
+            Label num_oldd = new Label();
+            num_oldd = new Label() { Left = 100, Top = 123, Width = 89, Font = new Font("Segoe UI", 14F), Height = 50, BackColor = Color.Bisque, Visible = true, ForeColor = Color.Black };
+            num_oldd.Enabled = true;
+            int y = 60;
+            int m = num_oldd.Location.Y;
+            for (int j = 0; j < pr.Count; j++)
+            {
+                Label numd = new Label();
+                numd.Size = num_oldd.Size;
+                numd.Text = pr[j].process_id.ToString();
+                numd.TextAlign = num_oldd.TextAlign;
+                numd.Location = new Point(num_oldd.Location.X, num_oldd.Location.Y + y - 60);
+                numd.Enabled = num_oldd.Enabled;
+                numd.BackColor = num_oldd.BackColor;
+                numd.Font = num_oldd.Font;
+                numd.TextAlign = num_oldd.TextAlign;
+                values[j] = numd;
+               
+                prompt.Controls.Add(numd);
+                y = y + 60;
+            }
+            //===============================
+            CheckBox num_ol = new CheckBox();
+            num_ol.Enabled = true;
+            int yy = 60;
+            for (int j = 0; j < pr.Count; j++)
+            {
+                CheckBox n = new CheckBox();
+                n.Size = num_ol.Size;
+                n.TextAlign = num_ol.TextAlign;
+                n.Location = new Point(num_oldd.Location.X + 100, m + yy - 60);
+                n.Enabled = num_ol.Enabled;
+                n.BackColor = num_ol.BackColor;
+                n.Font = num_ol.Font;
+                n.TextAlign = num_ol.TextAlign;
+                
+                names[j] = n;
+                prompt.Controls.Add(n);
+                yy = yy + 60;
+            }
+            List<process> pt = new List<process>();
+            Button confirmation = new Button() { Text = "Ok", Left = 100, Top = yy + 50, ForeColor = Color.DodgerBlue, Width = 88, Height = 46, BackColor = Color.Aquamarine };
+            confirmation.Click += (sender, e) => {
+                
+                for(int j = 0; j < pr.Count; j++)
+                {
+                    if (names[j].Checked)
+                    {
+                        pt.Add(pr[j]);
+                    }
+                }
+                prompt.Close();
+            };
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(textLabel);
+            prompt.ShowDialog();
+            return pt;
 
         }
     }

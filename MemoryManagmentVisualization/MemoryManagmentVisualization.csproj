@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="bestfit1.cs" />
     <Compile Include="firstfit.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
