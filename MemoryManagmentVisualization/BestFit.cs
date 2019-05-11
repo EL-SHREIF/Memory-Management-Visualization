@@ -75,6 +75,7 @@ namespace GUI_OS
                             {
                                empty_holes[best_holes[0].hole_id].alocated = true;
                                empty_holes[best_holes[0].hole_id].name = p[i].name_of_segment[x];
+                               p[i].process_index = i + x;
                                final_memory.Add(empty_holes[best_holes[0].hole_id]);
 
                             }
@@ -86,6 +87,7 @@ namespace GUI_OS
                                 hole t = new hole(a, b);                               
                                 t.alocated = true;
                                 t.name = p[i].name_of_segment[x];
+                                p[i].process_index = i + x;
                                 final_memory.Add(t);
                                 hole.sort_by_start(final_memory);
                                 // second hole after splitting
