@@ -110,6 +110,7 @@ namespace MemoryManagmentVisualization
                 schedular2 = new worstfit(holes, processes);
                 schedular2.computeWorstFit();
                 segments = schedular2.holes;
+                ShowDialog4(schedular2.holdProcesses);
             }
             Draw();
         }
@@ -134,6 +135,7 @@ namespace MemoryManagmentVisualization
                 schedular2 = new worstfit(holes, processes);
                 schedular2.computeWorstFit();
                 segments = schedular2.holes;
+                ShowDialog4(schedular2.holdProcesses);
             }
             Draw();
         }
@@ -246,7 +248,7 @@ namespace MemoryManagmentVisualization
             num_of_process++;
             int promptValue = Form7.ShowDialog("Number Of Segments", "enter no of segments");
             process p=Form7.ShowDialog2("enter process data", "new process",promptValue,num_of_process);
-            num_of_process++;
+            //num_of_process++;
             processes.Add(p);
             Form7 form = new Form7(holes,segments,processes,num_of_process,1);
             form.Show();
@@ -467,6 +469,58 @@ namespace MemoryManagmentVisualization
             prompt.Controls.Add(textLabel);
             prompt.ShowDialog();
             return pt;
+
+        }
+        private void ShowDialog4(List<process> a)
+        {
+            
+            Form prompt = new Form();
+            prompt.Width = 600;
+            prompt.Height = 600;
+            prompt.AutoScroll = true;
+            prompt.Text = "processes not allocated in memory";
+            Label[] values = new Label[a.Count];
+           
+            prompt.BackColor = Color.MistyRose;
+            Label textLabel = new Label() { Left = 50, Top = 64, Width = 200, Height = 41, Text = "process", BackColor = Color.Gray, Font = new Font("Segoe UI", 14F) };
+            //===============================
+            Label num_oldd = new Label();
+            num_oldd = new Label() { Left = 100, Top = 123, Width = 89, Font = new Font("Segoe UI", 14F), Height = 50, BackColor = Color.Bisque, Visible = true, ForeColor = Color.Black };
+            num_oldd.Enabled = true;
+            int y = 60;
+            int m = num_oldd.Location.Y;
+            for (int j = 0; j < a.Count; j++)
+            {
+                Label numd = new Label();
+                numd.Size = num_oldd.Size;
+                numd.Text = a[j].process_id.ToString();
+                numd.TextAlign = num_oldd.TextAlign;
+                numd.Location = new Point(num_oldd.Location.X, num_oldd.Location.Y + y - 60);
+                numd.Enabled = num_oldd.Enabled;
+                numd.BackColor = num_oldd.BackColor;
+                numd.Font = num_oldd.Font;
+                numd.TextAlign = num_oldd.TextAlign;
+                values[j] = numd;
+
+                prompt.Controls.Add(numd);
+                y = y + 60;
+            }
+            //===============================
+            CheckBox num_ol = new CheckBox();
+            num_ol.Enabled = true;
+            int yy = 60;
+            
+            List<process> pt = new List<process>();
+            Button confirmation = new Button() { Text = "Ok", Left = 100, Top = y + 50, ForeColor = Color.DodgerBlue, Width = 88, Height = 46, BackColor = Color.Aquamarine };
+            confirmation.Click += (sender, e) => {
+
+                
+                prompt.Close();
+            };
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(textLabel);
+            prompt.ShowDialog();
+           
 
         }
     }

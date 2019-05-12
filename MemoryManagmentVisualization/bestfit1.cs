@@ -9,14 +9,15 @@ namespace MemoryManagmentVisualization
     class bestfit1
     {
         public List<hole> output_memory = new List<hole>();
+        public List<process> remaining_processes = new List<process>();
+
         public bestfit1(List<process> p, List<hole> h)
         {
-            
             output_memory = func(p, h);
             // print(output_memory, memory_size);
         }
 
-        public static List<hole> func(List<process> p, List<hole> h)
+        public List<hole> func(List<process> p, List<hole> h)
         {
             hole.sort_by_start(h);
             List<hole> final_memory = new List<hole>();
@@ -33,7 +34,6 @@ namespace MemoryManagmentVisualization
             {
                 counter[i] = 0;
             }
-
             int total_sgements = 0;
             for (int i = 0; i < p.Count; i++)
             {
@@ -43,6 +43,7 @@ namespace MemoryManagmentVisualization
             Compaction_Before(empty_holes, ref no_of_holes);
             for (int i = 0; i < p.Count; i++)
             {
+                List<hole> temperory_memory = new List<hole>(); // for segments of each process
                 for (x = 0; x < p[i].no_of_segments; x++)
                 {
                     List<hole> best_holes = new List<hole>();
@@ -52,7 +53,6 @@ namespace MemoryManagmentVisualization
                         {
                             if (p[i].segmenst_sizes[x] <= empty_holes[j].size)
                             {
-
                                 size = h[j].size - p[i].segmenst_sizes[x];
                                 k++;
                                 m = new hole(h[j].start, size);
@@ -70,13 +70,11 @@ namespace MemoryManagmentVisualization
 
                     if (k != 0)
                     {
-
                         if (best_holes[0].size == 0)
                         {
                             empty_holes[best_holes[0].hole_id].alocated = true;
                             empty_holes[best_holes[0].hole_id].name = p[i].name_of_segment[x];
-                            final_memory.Add(empty_holes[best_holes[0].hole_id]);
-
+                            temperory_memory.Add(h[best_holes[0].hole_id]);
                         }
 
                         else
@@ -86,22 +84,69 @@ namespace MemoryManagmentVisualization
                             hole t = new hole(a, b);
                             t.alocated = true;
                             t.name = p[i].name_of_segment[x];
-                            final_memory.Add(t);
-                            hole.sort_by_start(final_memory);
+                            temperory_memory.Add(t);
                             // second hole after splitting
                             int z = t.start + t.size;
                             int y = best_holes[0].size;
                             hole s = new hole(z, y);
-                            empty_holes[best_holes[0].hole_id].start = s.start;
-                            empty_holes[best_holes[0].hole_id].size = s.size;
+                            s.hole_id = best_holes[0].hole_id;
+                            temperory_memory.Add(s);
                             Compaction_After(empty_holes, best_holes, ref no_of_holes);
                             hole.sort_by_start(empty_holes);
                         }
                         k = 0;
                     }
                 }
+                int u = 0;
+                int count = 0;
+                for (int y = 0; y < temperory_memory.Count; y++)
+                {
+                    if (temperory_memory[y].name == p[i].name_of_segment[u])
+                    {
+                        count++;
+                        if (count == p[i].no_of_segments)
+                        {
+                            for (int q = 0; q < temperory_memory.Count; q++)
+                            {
+                                if (temperory_memory[q].name == "hole")
+                                {
+                                    empty_holes[temperory_memory[q].hole_id].start = temperory_memory[q].start;
+                                    empty_holes[temperory_memory[q].hole_id].size = temperory_memory[q].size;
+                                    hole.sort_by_start(empty_holes);
+                                }
+                                else
+                                {
+                                    final_memory.Add(temperory_memory[q]);
+                                    for (int w = 0; w < empty_holes.Count; w++)
+                                    {
+                                        if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                        {
+                                            empty_holes[w].process_index = p[i].process_id;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (y == temperory_memory.Count - 1)
+                        {
+                            remaining_processes.Add(p[i]);
+                            for (int q = 0; q < temperory_memory.Count; q++)
+                            {
+                                for (int w = 0; w < empty_holes.Count; w++)
+                                {
+                                    if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                    {
+                                        empty_holes[w].alocated = false;
+                                        empty_holes[w].name = "hole";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 hole.sort_by_start(final_memory);
             }
+
             for (int i = 0; i < no_of_holes; i++)
             {
                 if (!empty_holes[i].alocated)
@@ -169,89 +214,89 @@ namespace MemoryManagmentVisualization
             }
         }
 
-        /*public static void print(List<hole> l, int memory_size)
-        {
-            List<hole> output =new List<hole>();
-            hole.sort_by_start(l);
-                   
-
-            // for first location in block
-            for (int i = 0; i <1; i++)
-            {
-               int size = l[i].start - 0;
-
-                if (size !=0)
-                {
-                    hole h = new hole(0 , size);
-                    h.alocated = true;
-                    h.name = "old process";
-                    output.Add(h);
-                    output.Add(l[0]);
-                }
-
-                else if (size == 0)
-                {
-
-                    output.Add(l[i]);
-                }
-
-            }
-
-            // for locations between memory
-            for (int i = 1; i <l.Count; i++)
-            {
-               int size = l[i].start - (l[i-1].start + (l[i-1].size));
-
-                if (size !=0)
-                {
-                    hole h = new hole(l[i-1].start + l[i-1].size , size);
-                    h.alocated = true;
-                    h.name = "old process";
-                    output.Add(h);
-                    output.Add(l[i]);
-                }
-
-                else if (size == 0)
-                {
-
-                    output.Add(l[i]);
-                }
-
-            }
-
-            // for last location in memory
-            for (int i = l.Count-1; i < l.Count; i++)
-            {
-                int size = memory_size - (l[i].start + l[i].size);
-
-                if (size != 0)
-                {
-                    hole h = new hole(l[i].start + l[i].size, size);
-                    h.alocated = true;
-                    h.name = "old process";
-                    output.Add(h);
-                }
-
-                else if (size == 0)
-                {
-
-                    output.Add(l[i]);
-                }
-
-            }
+        /* public static void print(List<hole> l, int memory_size)
+         {
+             List<hole> output = new List<hole>();
+             hole.sort_by_start(l);
 
 
-            for (int i = 0; i < output.Count; i++)
-            {
-               
-                int end =  output[i].start + output[i].size;
-                Console.WriteLine("\n");
-                Console.WriteLine(output[i].start);
-                Console.WriteLine("->");
-                Console.WriteLine(output[i].name);
-                Console.WriteLine("->");
-                Console.WriteLine(end);
-            }                  
-        }*/
+             // for first location in block
+             for (int i = 0; i < 1; i++)
+             {
+                 int size = l[i].start - 0;
+
+                 if (size != 0)
+                 {
+                     hole h = new hole(0, size);
+                     h.alocated = true;
+                     h.name = "old process";
+                     output.Add(h);
+                     output.Add(l[0]);
+                 }
+
+                 else if (size == 0)
+                 {
+
+                     output.Add(l[i]);
+                 }
+
+             }
+
+             // for locations between memory
+             for (int i = 1; i < l.Count; i++)
+             {
+                 int size = l[i].start - (l[i - 1].start + (l[i - 1].size));
+
+                 if (size != 0)
+                 {
+                     hole h = new hole(l[i - 1].start + l[i - 1].size, size);
+                     h.alocated = true;
+                     h.name = "old process";
+                     output.Add(h);
+                     output.Add(l[i]);
+                 }
+
+                 else if (size == 0)
+                 {
+
+                     output.Add(l[i]);
+                 }
+
+             }
+
+             // for last location in memory
+             for (int i = l.Count - 1; i < l.Count; i++)
+             {
+                 int size = memory_size - (l[i].start + l[i].size);
+
+                 if (size != 0)
+                 {
+                     hole h = new hole(l[i].start + l[i].size, size);
+                     h.alocated = true;
+                     h.name = "old process";
+                     output.Add(h);
+                 }
+
+                 else if (size == 0)
+                 {
+
+                     output.Add(l[i]);
+                 }
+
+             }
+
+
+             for (int i = 0; i < output.Count; i++)
+             {
+
+                 int end = output[i].start + output[i].size;
+                 Console.WriteLine("\n");
+                 Console.WriteLine(output[i].start);
+                 Console.WriteLine("->");
+                 Console.WriteLine(output[i].name);
+                 Console.WriteLine("->");
+                 Console.WriteLine(end);
+             }
+         }*/
     }
 }

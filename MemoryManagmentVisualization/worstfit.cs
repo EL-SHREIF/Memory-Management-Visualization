@@ -23,14 +23,20 @@ namespace MemoryManagmentVisualization
         {
             holdProcesses.Clear();
         }
-
+        public List<hole> copy(List<hole> t)
+        {
+            List<hole> w = new List<hole>();
+            for (int i = 0; i < t.Count; i++) w.Add(t[i]);
+            return w;
+        }
         public void computeWorstFit()
         {
             while (processes.Count > 0)
             {
                 process temp = processes[0];
                 processes.RemoveAt(0);
-                List<hole> tempHoles = holes;
+                List<hole> tempHoles =new List<hole>();
+                tempHoles = copy(holes);
                 int allocated = 0;
                 for(int i = 0; i < temp.no_of_segments; i++)
                 {
@@ -48,7 +54,7 @@ namespace MemoryManagmentVisualization
                             tempHole.alocated = true;
                             tempHole.name = temp.name_of_segment[i];
                             tempHole.process_index = temp.process_id;
-                            holes.Add(tempHole);
+                            tempHoles.Add(tempHole);
                             if (remainSize > 0)
                             {
                                 tempHoles.Add(new hole(tempHole.start + tempHole.size, remainSize));
@@ -107,9 +113,14 @@ namespace MemoryManagmentVisualization
                     {
                         tempBig = temp;
                     }
-                    else
+                    else if(temp.start==tempBig.start+tempBig.size)
                     {
                         tempBig.size = tempBig.size + temp.size;
+                    }
+                    else
+                    {
+                        tempHoles.Add(tempBig);
+                        tempBig = temp;
                     }
                 }
             }
