@@ -46,7 +46,8 @@ namespace MemoryManagmentVisualization
                     {
                         if (tempHoles[j].alocated == false && tempHoles[j].size >= temp.segmenst_sizes[i])
                         {
-                            hole tempHole = tempHoles[j];
+                            hole tempHole = new MemoryManagmentVisualization.hole(tempHoles[j].start,tempHoles[j].size);
+                            tempHole.alocated = false;
                             tempHoles.RemoveAt(j);
                             int remainSize = tempHole.size - temp.segmenst_sizes[i];
                             tempHole.size = temp.segmenst_sizes[i];
