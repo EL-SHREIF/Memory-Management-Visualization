@@ -23,7 +23,7 @@ namespace MemoryManagmentVisualization
         Color[] colors;
         private Form7(List<hole> ha,List<hole> s,List<process> pa,int n,int op)
         {
-            holes = ha;
+            holes = s;
             segments = s;
             processes = pa;
             num_of_process = n;
@@ -110,7 +110,7 @@ namespace MemoryManagmentVisualization
                 schedular2 = new worstfit(holes, processes);
                 schedular2.computeWorstFit();
                 segments = schedular2.holes;
-                ShowDialog4(schedular2.holdProcesses);
+                //ShowDialog4(schedular2.holdProcesses);
             }
             Draw();
         }

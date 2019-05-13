@@ -67,7 +67,7 @@ namespace MemoryManagmentVisualization
                 }
                 if (allocated == temp.no_of_segments)
                 {
-                    holes = tempHoles;
+                    holes = copy(tempHoles);
                 }
                 else
                 {

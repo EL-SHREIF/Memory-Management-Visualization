@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MemoryAllocation
+namespace MemoryManagmentVisualization
 {
     class firstfit
     {
@@ -30,7 +30,7 @@ namespace MemoryAllocation
             if (holes.Count == 1)
             {
                 for (int j = 0; j < p.no_of_segments; j++)
-                    sum_segments_sizes = sum_segments_sizes + p.segment_sizes[j];
+                    sum_segments_sizes = sum_segments_sizes + p.segmenst_sizes[j];
 
                 //1.1 The only case to allocate the process in the hole
                 if (holes[0].size >= sum_segments_sizes)
@@ -46,7 +46,7 @@ namespace MemoryAllocation
 
             for (int j = 0; j < p.no_of_segments; j++)
             {
-                int segment_size = p.segment_sizes[j];   //code = 170
+                int segment_size = p.segmenst_sizes[j];   //code = 170
 
                 for (int i = 0; i < holes.Count; i++)
                 {
@@ -95,7 +95,7 @@ namespace MemoryAllocation
 
                 for (int i = 0; i < process_segments_number; i++)
                 {
-                    segment_Size = allocation_process.segment_sizes[i];
+                    segment_Size = allocation_process.segmenst_sizes[i];
                     segment_name = allocation_process.name_of_segment[i];
                     segment_allocation_done[i] = false;
 
