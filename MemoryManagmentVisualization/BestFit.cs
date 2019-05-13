@@ -97,47 +97,51 @@ namespace GUI_OS
                         k = 0;
                     }
                 }
-                int u = 0;
                 int count = 0;
                 for (int y = 0; y < temperory_memory.Count; y++)
                 {
-                    if (temperory_memory[y].name == p[i].name_of_segment[u])
+                    for (int u = 0; u < p[i].no_of_segments; u++)
                     {
-                        count++;
-                        if (count == p[i].no_of_segments)
+                        if (temperory_memory[y].name == p[i].name_of_segment[u])
                         {
-                            for (int q = 0; q < temperory_memory.Count; q++)
+                            count++;
+                            if (count == p[i].no_of_segments)
                             {
-                                if (temperory_memory[q].name == "hole")
+                                for (int q = 0; q < temperory_memory.Count; q++)
                                 {
-                                    empty_holes[temperory_memory[q].hole_id].start = temperory_memory[q].start;
-                                    empty_holes[temperory_memory[q].hole_id].size = temperory_memory[q].size;
-                                    hole.sort_by_start(empty_holes);
-                                }
-                                else
-                                {
-                                    final_memory.Add(temperory_memory[q]);
-                                    for (int w = 0; w < empty_holes.Count; w++)
+                                    if (temperory_memory[q].name == "hole")
                                     {
-                                        if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                        empty_holes[temperory_memory[q].hole_id].start = temperory_memory[q].start;
+                                        empty_holes[temperory_memory[q].hole_id].size = temperory_memory[q].size;
+                                        hole.sort_by_start(empty_holes);
+                                    }
+                                    else
+                                    {
+                                        final_memory.Add(temperory_memory[q]);
+                                        for (int w = 0; w < empty_holes.Count; w++)
                                         {
-                                            empty_holes[w].process_index = p[i].process_id;
+                                            if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                            {
+                                                empty_holes[w].process_index = p[i].process_id;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        else if (y == temperory_memory.Count - 1)
-                        {
-                            remaining_processes.Add(p[i]);   
-                            for (int q = 0; q < temperory_memory.Count; q++)
+                            else if (y == temperory_memory.Count - 1)
                             {
-                                for (int w = 0; w < empty_holes.Count; w++)
+                                remaining_processes.Add(p[i]);
+                                for (int q = 0; q < temperory_memory.Count; q++)
                                 {
-                                    if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                    for (int w = 0; w < empty_holes.Count; w++)
                                     {
-                                        empty_holes[w].alocated = false;
-                                        empty_holes[w].name = "hole";
+                                        if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                        {
+                                            empty_holes[w].alocated = false;
+                                            empty_holes[w].name = "hole";
+                                            hole.sort_by_start(empty_holes);
+                                        }
+
                                     }
                                 }
                             }
@@ -146,7 +150,6 @@ namespace GUI_OS
                 }
                 hole.sort_by_start(final_memory);
             }
-
             for (int i = 0; i < no_of_holes; i++)
             {
                 if (!empty_holes[i].alocated)
