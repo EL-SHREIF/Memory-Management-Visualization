@@ -96,7 +96,8 @@ namespace MemoryManagmentVisualization
                 schedular1 = new firstfit(holes, processes);
                 schedular1.First_Fit_Algorithm();
                 segments = schedular1.holes;
-               
+                ShowDialog4(schedular1.segments_not_allocated);
+
             }
             else if (Form1.type_of_algorithm == 2)
             {
@@ -110,7 +111,7 @@ namespace MemoryManagmentVisualization
                 schedular2 = new worstfit(holes, processes);
                 schedular2.computeWorstFit();
                 segments = schedular2.holes;
-                //ShowDialog4(schedular2.holdProcesses);
+                ShowDialog4(schedular2.holdProcesses);
             }
             Draw();
         }
@@ -121,6 +122,7 @@ namespace MemoryManagmentVisualization
                 schedular1 = new firstfit(holes, processes);
                 schedular1.First_Fit_Algorithm();
                 segments = schedular1.holes;
+                ShowDialog4(schedular1.segments_not_allocated);
 
             }
             else if (Form1.type_of_algorithm == 2)
