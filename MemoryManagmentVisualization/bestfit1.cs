@@ -10,7 +10,18 @@ namespace MemoryManagmentVisualization
     {
         public List<hole> output_memory = new List<hole>();
         public List<process> remaining_processes = new List<process>();
-
+        public List<hole> copy(List<hole> t)
+        {
+            List<hole> w = new List<hole>();
+            for (int i = 0; i < t.Count; i++)
+            {
+                hole first = new MemoryManagmentVisualization.hole(t[0].start, t[0].size);
+                first.alocated = t[i].alocated; first.hole_id = t[i].hole_id; first.name = t[i].name;
+                first.process_index = t[i].process_index;
+                w.Add(first);
+            }
+            return w;
+        }
         public bestfit1(List<process> p, List<hole> h)
         {
             output_memory = func(p, h);
@@ -22,7 +33,7 @@ namespace MemoryManagmentVisualization
             hole.sort_by_start(h);
             List<hole> final_memory = new List<hole>();
             List<hole> empty_holes = new List<hole>();
-            empty_holes = h;
+            empty_holes = copy(h);
             int no_of_holes = h.Count;
             hole m;
             int k = 0;
@@ -30,30 +41,27 @@ namespace MemoryManagmentVisualization
             int j;
             int x;
             int[] counter = new int[no_of_holes];
-            for (int i = 0; i < no_of_holes; i++)
-            {
-                counter[i] = 0;
-            }
+            
             int total_sgements = 0;
             for (int i = 0; i < p.Count; i++)
             {
                 total_sgements = p[i].no_of_segments + total_sgements;
             }
 
-            Compaction_Before(empty_holes, ref no_of_holes);
-            for (int i = 0; i < p.Count; i++)
+          //  Compaction_Before(empty_holes, ref no_of_holes);
+            while(p.Count>0)
             {
                 List<hole> temperory_memory = new List<hole>(); // for segments of each process
-                for (x = 0; x < p[i].no_of_segments; x++)
+                for (x = 0; x < p[0].no_of_segments; x++)
                 {
                     List<hole> best_holes = new List<hole>();
                     for (j = 0; j < no_of_holes; j++)
                     {
                         if (!empty_holes[j].alocated)
                         {
-                            if (p[i].segmenst_sizes[x] <= empty_holes[j].size)
+                            if (p[0].segmenst_sizes[x] <= empty_holes[j].size)
                             {
-                                size = h[j].size - p[i].segmenst_sizes[x];
+                                size = h[j].size - p[0].segmenst_sizes[x];
                                 k++;
                                 m = new hole(h[j].start, size);
                                 m.hole_id = h[j].hole_id;
@@ -73,71 +81,84 @@ namespace MemoryManagmentVisualization
                         if (best_holes[0].size == 0)
                         {
                             empty_holes[best_holes[0].hole_id].alocated = true;
-                            empty_holes[best_holes[0].hole_id].name = p[i].name_of_segment[x];
+                            empty_holes[best_holes[0].hole_id].name = p[0].name_of_segment[x];
+                            empty_holes[best_holes[0].hole_id].process_index = p[0].process_id;
                             temperory_memory.Add(h[best_holes[0].hole_id]);
                         }
 
                         else
                         {
                             int a = best_holes[0].start;
-                            int b = p[i].segmenst_sizes[x];
+                            int b = p[0].segmenst_sizes[x];
                             hole t = new hole(a, b);
                             t.alocated = true;
-                            t.name = p[i].name_of_segment[x];
+                            t.name = p[0].name_of_segment[x];
+                            t.process_index = p[0].process_id;
                             temperory_memory.Add(t);
+                            
                             // second hole after splitting
                             int z = t.start + t.size;
                             int y = best_holes[0].size;
                             hole s = new hole(z, y);
                             s.hole_id = best_holes[0].hole_id;
                             temperory_memory.Add(s);
-                            Compaction_After(empty_holes, best_holes, ref no_of_holes);
+                           // Compaction_After(empty_holes, best_holes, ref no_of_holes);
                             hole.sort_by_start(empty_holes);
                         }
                         k = 0;
                     }
                 }
-                int u = 0;
                 int count = 0;
+                if (temperory_memory.Count == 0)
+                {
+                    p.Remove(p[0]);
+                    
+                }
                 for (int y = 0; y < temperory_memory.Count; y++)
                 {
-                    if (temperory_memory[y].name == p[i].name_of_segment[u])
+                    for (int u = 0; p.Count > 0 &&u<p[0].no_of_segments; u++)
                     {
-                        count++;
-                        if (count == p[i].no_of_segments)
+                        if (temperory_memory[y].name == p[0].name_of_segment[u])
                         {
-                            for (int q = 0; q < temperory_memory.Count; q++)
+                            count++;
+                            if (count == p[0].no_of_segments)
                             {
-                                if (temperory_memory[q].name == "hole")
+                                for (int q = 0; q < temperory_memory.Count; q++)
                                 {
-                                    empty_holes[temperory_memory[q].hole_id].start = temperory_memory[q].start;
-                                    empty_holes[temperory_memory[q].hole_id].size = temperory_memory[q].size;
-                                    hole.sort_by_start(empty_holes);
-                                }
-                                else
-                                {
-                                    final_memory.Add(temperory_memory[q]);
-                                    for (int w = 0; w < empty_holes.Count; w++)
+                                    if (temperory_memory[q].name == "hole")
                                     {
-                                        if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                        empty_holes[temperory_memory[q].hole_id].start = temperory_memory[q].start;
+                                        empty_holes[temperory_memory[q].hole_id].size = temperory_memory[q].size;
+                                        hole.sort_by_start(empty_holes);
+                                    }
+                                    else
+                                    {
+                                        final_memory.Add(temperory_memory[q]);
+                                        //temperory_memory.Remove(temperory_memory[q]);
+                                        p.Remove(p[0]);
+                                        for (int w = 0; w < empty_holes.Count; w++)
                                         {
-                                            empty_holes[w].process_index = p[i].process_id;
+                                            if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                            {
+                                                empty_holes[w].process_index = p[0].process_id;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        else if (y == temperory_memory.Count - 1)
-                        {
-                            remaining_processes.Add(p[i]);
-                            for (int q = 0; q < temperory_memory.Count; q++)
+                            if (y == temperory_memory.Count - 1)
                             {
-                                for (int w = 0; w < empty_holes.Count; w++)
+                                remaining_processes.Add(p[0]);
+                                p.Remove(p[0]);
+                                for (int q = 0; q < temperory_memory.Count; q++)
                                 {
-                                    if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                    for (int w = 0; w < empty_holes.Count; w++)
                                     {
-                                        empty_holes[w].alocated = false;
-                                        empty_holes[w].name = "hole";
+                                        if (temperory_memory[q].start == empty_holes[w].start && temperory_memory[q].size == empty_holes[w].size)
+                                        {
+                                            empty_holes[w].alocated = false;
+                                            empty_holes[w].name = "hole";
+                                        }
                                     }
                                 }
                             }

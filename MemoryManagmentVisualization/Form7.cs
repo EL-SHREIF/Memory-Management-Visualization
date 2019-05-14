@@ -28,7 +28,7 @@ namespace MemoryManagmentVisualization
             processes = pa;
             num_of_process = n;
             InitializeComponent();
-
+            hole.sort(segments);
             
 
             colors = new Color[15];
@@ -101,9 +101,10 @@ namespace MemoryManagmentVisualization
             }
             else if (Form1.type_of_algorithm == 2)
             {
-                schedular3 = new bestfit1(processes, holes);
-                
-                segments = schedular3.output_memory;
+                schedular2 = new worstfit(holes, processes);
+                schedular2.computebestFit();
+                segments = schedular2.holes;
+                ShowDialog4(schedular2.holdProcesses);
 
             }
             else if (Form1.type_of_algorithm == 3)
@@ -127,9 +128,10 @@ namespace MemoryManagmentVisualization
             }
             else if (Form1.type_of_algorithm == 2)
             {
-                schedular3 = new bestfit1(processes, holes);
-
-                segments = schedular3.output_memory;
+                schedular2 = new worstfit(holes, processes);
+                schedular2.computebestFit();
+                segments = schedular2.holes;
+                ShowDialog4(schedular2.holdProcesses);
 
             }
             else if (Form1.type_of_algorithm == 3)
@@ -524,6 +526,38 @@ namespace MemoryManagmentVisualization
             prompt.ShowDialog();
            
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            hole.sort(segments);
+            int start = 0;
+            List<hole> temp = new List<hole>();
+            for(int i = 0; i <segments.Count; i++)
+            {
+                if (segments[i].start > start)
+                {
+                    hole t = new hole(start, segments[i].start - start);
+                    temp.Add(t);
+                }
+                start = segments[i].start + segments[i].size;
+            }
+            if (start < Form1.total_memory_size)
+            {
+                hole t = new hole(start, Form1.total_memory_size-start);
+                temp.Add(t);
+            }
+            for(int i = 0; i < temp.Count; i++)
+            {
+                segments.Add(temp[i]);
+            }
+            
+            schedular2 = new worstfit(segments, processes);
+            schedular2.fix();
+            segments = schedular2.holes;
+            Form7 form = new Form7(holes, segments, processes, num_of_process, 2);
+            form.Show();
+            Hide();
         }
     }
 }

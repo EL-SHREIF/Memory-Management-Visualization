@@ -11,14 +11,14 @@ namespace MemoryManagmentVisualization
         public List<hole> holes;
         public List<process> processes;
 
-        
+
         public List<process> holdProcesses = new List<process>(0);         //processes can't be allocated in memory
         public worstfit(List<hole> h, List<process> p)
         {
             holes = h;
             processes = p;
         }
-        
+
         public void clearData()
         {
             holdProcesses.Clear();
@@ -35,18 +35,18 @@ namespace MemoryManagmentVisualization
             {
                 process temp = processes[0];
                 processes.RemoveAt(0);
-                List<hole> tempHoles =new List<hole>();
+                List<hole> tempHoles = new List<hole>();
                 tempHoles = copy(holes);
                 int allocated = 0;
-                for(int i = 0; i < temp.no_of_segments; i++)
+                for (int i = 0; i < temp.no_of_segments; i++)
                 {
                     hole.sort2(tempHoles);
                     tempHoles.Reverse();
-                    for(int j = 0; j < tempHoles.Count; j++)
+                    for (int j = 0; j < tempHoles.Count; j++)
                     {
                         if (tempHoles[j].alocated == false && tempHoles[j].size >= temp.segmenst_sizes[i])
                         {
-                            hole tempHole = new MemoryManagmentVisualization.hole(tempHoles[j].start,tempHoles[j].size);
+                            hole tempHole = new MemoryManagmentVisualization.hole(tempHoles[j].start, tempHoles[j].size);
                             tempHole.alocated = false;
                             tempHoles.RemoveAt(j);
                             int remainSize = tempHole.size - temp.segmenst_sizes[i];
@@ -78,9 +78,9 @@ namespace MemoryManagmentVisualization
 
         public void deallocator()
         {
-            for(int i = 0; i < processes.Count; i++)
+            for (int i = 0; i < processes.Count; i++)
             {
-                for(int j = 0; j < holes.Count; j++)
+                for (int j = 0; j < holes.Count; j++)
                 {
                     if (holes[j].process_index == processes[i].process_id)
                     {
@@ -97,7 +97,7 @@ namespace MemoryManagmentVisualization
         {
             hole.sort(holes);
             List<hole> tempHoles = new List<hole>(0);
-            hole tempBig = new MemoryManagmentVisualization.hole(0,0);
+            hole tempBig = new MemoryManagmentVisualization.hole(0, 0);
             while (holes.Count > 0)
             {
                 hole temp = holes[0];
@@ -105,7 +105,7 @@ namespace MemoryManagmentVisualization
                 if (temp.alocated)
                 {
                     tempHoles.Add(tempBig);
-                    tempBig = new MemoryManagmentVisualization.hole(0,0);
+                    tempBig = new MemoryManagmentVisualization.hole(0, 0);
                     tempHoles.Add(temp);
                 }
                 else
@@ -114,7 +114,7 @@ namespace MemoryManagmentVisualization
                     {
                         tempBig = temp;
                     }
-                    else if(temp.start==tempBig.start+tempBig.size)
+                    else if (temp.start == tempBig.start + tempBig.size)
                     {
                         tempBig.size = tempBig.size + temp.size;
                     }
@@ -128,6 +128,13 @@ namespace MemoryManagmentVisualization
             if (tempBig.size > 0) tempHoles.Add(tempBig);
             holes = tempHoles;
             hole.sort(holes);
+            for (int i = 0; i < holes.Count; i++)
+            {
+                if (holes[i].size == 0)
+                {
+                    holes.RemoveAt(i); i--;
+                }
+            }
         }
         public void computebestFit()
         {
@@ -135,7 +142,8 @@ namespace MemoryManagmentVisualization
             {
                 process temp = processes[0];
                 processes.RemoveAt(0);
-                List<hole> tempHoles = holes;
+                List<hole> tempHoles = new List<hole>();
+                tempHoles = copy(holes);
                 int allocated = 0;
                 for (int i = 0; i < temp.no_of_segments; i++)
                 {
@@ -145,7 +153,8 @@ namespace MemoryManagmentVisualization
                     {
                         if (tempHoles[j].alocated == false && tempHoles[j].size >= temp.segmenst_sizes[i])
                         {
-                            hole tempHole = tempHoles[j];
+                            hole tempHole = new MemoryManagmentVisualization.hole(tempHoles[j].start, tempHoles[j].size);
+                            tempHole.alocated = false;
                             tempHoles.RemoveAt(j);
                             int remainSize = tempHole.size - temp.segmenst_sizes[i];
                             tempHole.size = temp.segmenst_sizes[i];
@@ -153,7 +162,7 @@ namespace MemoryManagmentVisualization
                             tempHole.alocated = true;
                             tempHole.name = temp.name_of_segment[i];
                             tempHole.process_index = temp.process_id;
-                            holes.Add(tempHole);
+                            tempHoles.Add(tempHole);
                             if (remainSize > 0)
                             {
                                 tempHoles.Add(new hole(tempHole.start + tempHole.size, remainSize));
@@ -165,14 +174,14 @@ namespace MemoryManagmentVisualization
                 }
                 if (allocated == temp.no_of_segments)
                 {
-                    holes = tempHoles;
+                    holes = copy(tempHoles);
                 }
                 else
                 {
                     holdProcesses.Add(temp);
                 }
             }
-        }
 
+        }
     }
 }

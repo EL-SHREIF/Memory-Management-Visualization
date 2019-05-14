@@ -42,6 +42,7 @@
             this.btn_ok_number_of_process = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.tabControl_GanttChart.SuspendLayout();
             this.tabPage_GanttChart.SuspendLayout();
             this.SuspendLayout();
@@ -158,7 +159,7 @@
             this.btn_ok_number_of_process.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_ok_number_of_process.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_ok_number_of_process.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.btn_ok_number_of_process.Location = new System.Drawing.Point(12, 298);
+            this.btn_ok_number_of_process.Location = new System.Drawing.Point(12, 330);
             this.btn_ok_number_of_process.Name = "btn_ok_number_of_process";
             this.btn_ok_number_of_process.Size = new System.Drawing.Size(258, 46);
             this.btn_ok_number_of_process.TabIndex = 177;
@@ -188,7 +189,7 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.button2.Location = new System.Drawing.Point(12, 377);
+            this.button2.Location = new System.Drawing.Point(12, 393);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(258, 46);
             this.button2.TabIndex = 179;
@@ -196,12 +197,28 @@
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.Aquamarine;
+            this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.button3.Location = new System.Drawing.Point(12, 217);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(258, 85);
+            this.button3.TabIndex = 180;
+            this.button3.Text = "Deallocate old processes";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // Form7
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(809, 533);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btn_ok_number_of_process);
@@ -235,5 +252,6 @@
         private System.Windows.Forms.Button btn_ok_number_of_process;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }
